@@ -1,0 +1,244 @@
+/* --- Custom Variables & Reset --- */
+:root {
+    --bg-color: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --success: #10b981;
+    --error: #ef4444;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- Animated Background Elements --- */
+.background-decor {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    top: -10%;
+    left: -10%;
+    z-index: 1;
+}
+
+.background-decor:nth-child(2) {
+    top: auto;
+    left: auto;
+    bottom: -10%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+}
+
+@keyframes floatBlob {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+}
+
+.animate-blob {
+    animation: floatBlob 8s infinite ease-in-out;
+}
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+/* --- Glassmorphic Container --- */
+.form-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUpFade 0.6s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.form-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #fff, var(--text-muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- Input UI Components --- */
+.input-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    transition: var(--transition-smooth);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 0.85rem 2.8rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.input-wrapper input::placeholder {
+    color: rgba(148, 163, 184, 0.4);
+}
+
+/* Icons */
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+}
+
+.status-icon {
+    position: absolute;
+    right: 1rem;
+    font-size: 1rem;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: var(--transition-smooth);
+    pointer-events: none;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+.toggle-password:hover { color: var(--text-main); }
+
+.error-text {
+    color: var(--error);
+    font-size: 0.78rem;
+    margin-top: 0.4rem;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: var(--transition-smooth);
+    height: 0;
+    overflow: hidden;
+}
+
+/* --- Focus & States --- */
+.input-wrapper input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    background: rgba(15, 23, 42, 0.8);
+}
+
+.input-group:focus-within label {
+    color: var(--accent);
+}
+
+.input-wrapper input:focus ~ .input-icon {
+    color: var(--accent);
+}
+
+/* --- Validation Visual States --- */
+.input-group.success .input-wrapper input { border-color: var(--success); }
+.input-group.success .status-icon.success { opacity: 1; transform: scale(1); color: var(--success); }
+
+.input-group.error .input-wrapper input { 
+    border-color: var(--error); 
+    animation: shake 0.4s ease-in-out;
+}
+.input-group.error .status-icon.error { opacity: 1; transform: scale(1); color: var(--error); }
+.input-group.error .error-text { opacity: 1; transform: translateY(0); height: auto; }
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+/* --- Interactive Submit Button --- */
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+.btn-icon {
+    transition: var(--transition-smooth);
+}
+
+.submit-btn:hover .btn-icon {
+    transform: translateX(4px);
+}
